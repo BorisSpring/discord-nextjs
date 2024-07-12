@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import axios from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -16,8 +17,15 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { serverSchema } from '@/lib/validations';
+import FileUpload from '../FileUpload';
+import { useModalStore } from '@/hooks/useModalStore';
+import { createServer } from '@/lib/actions/server.action';
+import { usePathname } from 'next/navigation';
 
 const ServerForm = () => {
+  const pathName = usePathname();
+  const { onClose } = useModalStore();
+
   const form = useForm<z.infer<typeof serverSchema>>({
     resolver: zodResolver(serverSchema),
     defaultValues: {
@@ -29,7 +37,11 @@ const ServerForm = () => {
   const isSubmiting = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof serverSchema>) => {
-    console.log(values);
+    try {
+      await createServer({ ...values, route: pathName });
+      form.reset();
+      onClose();
+    } catch (error) {}
   };
 
   return (
@@ -42,10 +54,10 @@ const ServerForm = () => {
             <FormItem>
               <FormLabel>Image</FormLabel>
               <FormControl>
-                <Input
-                  className='bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
-                  placeholder='Enter server name'
-                  {...field}
+                <FileUpload
+                  endpoint='serverImage'
+                  value={field.value}
+                  onChange={field.onChange}
                 />
               </FormControl>
               <FormDescription>

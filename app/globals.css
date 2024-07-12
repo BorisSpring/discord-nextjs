@@ -8,6 +8,12 @@ body,
   height: 100%;
 }
 
+@layer utilities {
+  .no-focus {
+    @apply focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0 !important;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

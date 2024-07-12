@@ -4,15 +4,18 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
 import ServerForm from '../forms/ServerForm';
+import { useModalStore } from '@/hooks/useModalStore';
 const CreateServerModal = () => {
+  const { isOpen, type, onClose } = useModalStore();
+
+  const isDialogOpen = isOpen && type === 'createServer';
+
   return (
-    <Dialog open>
-      {/* <DialogTrigger>Open</DialogTrigger> */}
+    <Dialog open={isDialogOpen} onOpenChange={() => onClose()}>
       <DialogContent className='bg-white text-black  overflow-hidden'>
         <DialogHeader>
           <DialogTitle className='text-center text-2xl font-bold'>
