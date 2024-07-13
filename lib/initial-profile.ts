@@ -8,14 +8,14 @@ export const initialProfile = async () => {
     return auth().redirectToSignIn();
   }
 
-  let profile = await prisma.profile.findUnique({
+  let profile = await prisma?.profile.findUnique({
     where: {
       userId: user.id,
     },
   });
 
   if (!profile) {
-    profile = await prisma.profile.create({
+    profile = await prisma?.profile.create({
       data: {
         userId: user.id,
         name: `${user.firstName} ${user.lastName}`,

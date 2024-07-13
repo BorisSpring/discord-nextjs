@@ -1,6 +1,10 @@
 import { Channel, Member, Profile, Server } from '@prisma/client';
 
+export type MemberWithProfile = Member & {
+  profile: Profile;
+};
+
 export type ServerWithMembersAndProfiles = Server & {
-  members: Member[];
+  members: MemberWithProfile[];
   channels: Channel[];
 };

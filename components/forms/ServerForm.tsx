@@ -19,18 +19,23 @@ import { Input } from '@/components/ui/input';
 import { serverSchema } from '@/lib/validations';
 import FileUpload from '../FileUpload';
 import { useModalStore } from '@/hooks/useModalStore';
-import { createServer } from '@/lib/actions/server.action';
+import { createServer, updateServer } from '@/lib/actions/server.action';
 import { usePathname } from 'next/navigation';
+import { Server } from '@prisma/client';
 
-const ServerForm = () => {
+interface Props {
+  server?: Server;
+}
+
+const ServerForm = ({ server }: Props) => {
   const pathName = usePathname();
   const { onClose } = useModalStore();
 
   const form = useForm<z.infer<typeof serverSchema>>({
     resolver: zodResolver(serverSchema),
     defaultValues: {
-      name: '',
-      imageUrl: '',
+      name: server?.name || '',
+      imageUrl: server?.imageUrl || '',
     },
   });
 
@@ -38,7 +43,9 @@ const ServerForm = () => {
 
   const onSubmit = async (values: z.infer<typeof serverSchema>) => {
     try {
-      await createServer({ ...values, route: pathName });
+      await (server
+        ? updateServer({ ...values, id: server.id })
+        : createServer({ ...values, route: pathName }));
       form.reset();
       onClose();
     } catch (error) {}

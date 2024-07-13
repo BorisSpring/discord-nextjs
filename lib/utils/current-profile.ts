@@ -1,4 +1,5 @@
 import { auth } from '@clerk/nextjs/server';
+import prisma from '../prisma';
 
 export const currentProfle = async () => {
   const { userId } = auth();

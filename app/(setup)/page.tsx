@@ -1,4 +1,4 @@
-import CreateServerModal from '@/components/modals/CreateServerModal';
+import InitialModal from '@/components/modals/InitialModal';
 import { initialProfile } from '@/lib/initial-profile';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -16,11 +16,7 @@ const SetupPage = async () => {
     },
   });
 
-  if (server) {
-    return redirect(`/servers/${server.id}`);
-  }
-
-  return <CreateServerModal />;
+  return server ? redirect(`/servers/${server.id}`) : <InitialModal />;
 };
 
 export default SetupPage;
