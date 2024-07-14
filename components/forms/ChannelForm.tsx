@@ -23,30 +23,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ChannelType } from '@prisma/client';
+import { Channel, ChannelType } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { createChannel } from '@/lib/actions/channel.action';
+import { createChannel, updateChannel } from '@/lib/actions/channel.action';
 import { useModalStore } from '@/hooks/useModalStore';
 
 interface Props {
   server?: ServerWithMembersAndProfiles;
+  channelType?: ChannelType;
+  channel?: Channel;
 }
 
-const ChannelForm = ({ server }: Props) => {
+const ChannelForm = ({ server, channelType, channel }: Props) => {
   const pathName = usePathname();
   const { onClose } = useModalStore();
   const form = useForm<z.infer<typeof channelSchema>>({
     resolver: zodResolver(channelSchema),
     defaultValues: {
-      name: '',
-      type: ChannelType.TEXT,
+      name: channel?.name || '',
+      type: channel?.type || channelType || ChannelType.TEXT,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof channelSchema>) => {
     try {
-      await createChannel({ ...values, serverId: server?.id, route: pathName });
+      const methodObject = { ...values, serverId: server?.id, route: pathName };
+      await (channel?.id
+        ? updateChannel({ ...methodObject, channelId: channel.id })
+        : createChannel(methodObject));
       onClose();
     } catch (error) {
       console.error(error);
@@ -86,7 +91,10 @@ const ChannelForm = ({ server }: Props) => {
                 Channel Type
               </FormLabel>
               <FormControl>
-                <Select onValueChange={field.onChange}>
+                <Select
+                  defaultValue={channel?.type || channelType}
+                  onValueChange={field.onChange}
+                >
                   <SelectTrigger className='w-full bg-zinc-300/50 outline-none border-0 text-black  no-focus'>
                     <SelectValue placeholder='Select Channel Type' />
                   </SelectTrigger>
@@ -107,7 +115,13 @@ const ChannelForm = ({ server }: Props) => {
           variant='primary'
           type='submit'
         >
-          {isSubmiting ? <Loader2 className='size-4 animate-spin' /> : 'Submit'}
+          {isSubmiting ? (
+            <Loader2 className='size-4 animate-spin' />
+          ) : channel?.id ? (
+            'Edit'
+          ) : (
+            'Create'
+          )}
         </Button>
       </form>
     </Form>

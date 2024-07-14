@@ -12,17 +12,22 @@ import ChannelForm from '../forms/ChannelForm';
 const CreateChannelModal = () => {
   const { isOpen, type, onClose, data } = useModalStore();
 
-  const isDialogOpen = isOpen && type === 'createChannel';
+  const isDialogOpen =
+    isOpen && (type === 'createChannel' || type === 'editChannel');
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={() => onClose()}>
       <DialogContent className='bg-white text-black  overflow-hidden'>
         <DialogHeader>
           <DialogTitle className='text-center text-2xl font-bold'>
-            Create New Channel
+            {data?.channel ? 'Edit' : ' Create New'} Channel
           </DialogTitle>
           <DialogDescription className='text-center text-zinc-500'>
-            <ChannelForm server={data.server} />
+            <ChannelForm
+              channel={data?.channel}
+              server={data?.server}
+              channelType={data?.channelType}
+            />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

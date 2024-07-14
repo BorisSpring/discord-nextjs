@@ -48,13 +48,6 @@ export interface KickUserFromServerParams {
   route: string;
 }
 
-export interface CreateChannelParams {
-  serverId?: string;
-  type: ChannelType;
-  name: string;
-  route: string;
-}
-
 export interface LeaveServerParams {
   serverId?: string;
   route: string;
@@ -62,5 +55,22 @@ export interface LeaveServerParams {
 
 export interface DeleteServerParams {
   serverId?: string;
+  route: string;
+}
+
+export interface CreateChannelParams {
+  serverId?: string;
+  type: ChannelType;
+  name: string;
+  route: string;
+}
+
+export interface UpdateChannelParams extends CreateChannelParams {
+  channelId: string;
+}
+
+export interface DeleteChannelParams {
+  channelId: string | undefined;
+  serverId: string | undefined;
   route: string;
 }
