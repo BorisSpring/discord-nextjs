@@ -5,8 +5,9 @@ import { Edit, HashIcon, Lock, Mic, Trash, Video } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import ActionToolTip from '../ActionToolTip';
-import { useModalStore } from '@/hooks/useModalStore';
+import { ModalType, useModalStore } from '@/hooks/useModalStore';
 import { ServerWithMembersAndProfiles } from '@/lib/types';
+import { channel } from 'diagnostics_channel';
 
 interface Props {
   channel: Channel;
@@ -31,9 +32,15 @@ const ServerChannel = ({ channel, server, role }: Props) => {
   const params = useParams();
   const { onOpen } = useModalStore();
 
+  const onAction = (e: React.MouseEvent, action: ModalType) => {
+    e.stopPropagation();
+    onOpen(action, { channel, server });
+  };
   return (
     <button
-      onClick={() => {}}
+      onClick={(e) => {
+        router.push(`/servers/${params?.serverId}/channels/${channel.id}`);
+      }}
       className={cn(
         'group p-2 rounded-md flex items-center gap-x-2 w-full hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 mb-1',
         params?.channelId === channel.id && 'bg-zinc-700/20 dark:bg-zinc-700'
@@ -53,13 +60,13 @@ const ServerChannel = ({ channel, server, role }: Props) => {
         <div className='ml-auto flex items-center gap-x-2'>
           <ActionToolTip label='Edit' align='center' side='top'>
             <Edit
-              onClick={() => onOpen('editChannel', { channel, server })}
+              onClick={(e) => onAction(e, 'editChannel')}
               className='size-4  hidden group-hover:block text-zinc-500 hover:text-zinc-400 dark:hover:text-zinc-300 transition'
             />
           </ActionToolTip>
           <ActionToolTip label='Delete' align='center' side='top'>
             <Trash
-              onClick={() => onOpen('deleteChannel', { server, channel })}
+              onClick={(e) => onAction(e, 'deleteChannel')}
               className='size-4  hidden group-hover:block text-zinc-500 hover:text-zinc-400 dark:hover:text-zinc-300 transition'
             />
           </ActionToolTip>
