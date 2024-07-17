@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import axios from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -45,7 +44,7 @@ const ServerForm = ({ server }: Props) => {
     try {
       await (server
         ? updateServer({ ...values, id: server.id })
-        : createServer({ ...values, route: pathName }));
+        : createServer({ ...values, route: pathName! }));
       form.reset();
       onClose();
     } catch (error) {}

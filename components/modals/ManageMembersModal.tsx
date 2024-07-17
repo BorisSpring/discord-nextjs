@@ -62,7 +62,7 @@ const ManageMembersModal = () => {
       const updatedServer = await updateMemberRole({
         memberId,
         role,
-        route: pathName,
+        route: pathName!,
         serverId: server?.id,
       });
       if (updatedServer) {
@@ -81,7 +81,7 @@ const ManageMembersModal = () => {
       const updatedServer = await kickUserFromServer({
         memberId,
         serverId: server?.id,
-        route: pathName,
+        route: pathName!,
       });
       onOpen('members', { server: updatedServer });
     } catch (error) {

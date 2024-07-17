@@ -74,3 +74,22 @@ export interface DeleteChannelParams {
   serverId: string | undefined;
   route: string;
 }
+
+export interface FindGeneralChannelParams {
+  serverId: string;
+}
+
+export interface findChannelByServerIdAndChannelIdParams {
+  serverId: string;
+  channelId: string;
+}
+
+export interface FindConversationParams {
+  serverId: string;
+  memberId: string;
+}
+
+export interface GetMessagesParams {
+  channelId?: string;
+  cursor?: string;
+}

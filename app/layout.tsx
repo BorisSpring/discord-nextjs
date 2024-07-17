@@ -3,9 +3,10 @@ import { Open_Sans } from 'next/font/google';
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from '@/components/theme-provider/theme-provider';
-import { ModeToggle } from '@/components/ModeToggle';
 import { cn } from '@/lib/utils';
 import ModalProvider from '@/components/theme-provider/ModalProvider';
+import { SocketProvider } from '@/components/theme-provider/SocketProvider';
+import { QueryProvider } from '@/components/theme-provider/QueryProvider';
 
 const font = Open_Sans({ subsets: ['latin'] });
 
@@ -29,8 +30,10 @@ export default function RootLayout({
             storageKey='discord-theme'
             enableSystem={false}
           >
-            <ModalProvider />
-            {children}
+            <SocketProvider>
+              <ModalProvider />
+              <QueryProvider>{children}</QueryProvider>
+            </SocketProvider>
           </ThemeProvider>
         </body>
       </html>

@@ -11,7 +11,7 @@ import {
 
 import { useModalStore } from '@/hooks/useModalStore';
 import { Button } from '../ui/button';
-import { deleteServer, leaveServer } from '@/lib/actions/server.action';
+import { deleteServer } from '@/lib/actions/server.action';
 import { usePathname, useRouter } from 'next/navigation';
 
 const DeleteServerModal = () => {
@@ -22,7 +22,7 @@ const DeleteServerModal = () => {
 
   const onHandleDeleteServer = async () => {
     try {
-      await deleteServer({ serverId: data.server?.id, route: pathName });
+      await deleteServer({ serverId: data.server?.id, route: pathName! });
       onClose();
       router.push('/');
     } catch (error) {

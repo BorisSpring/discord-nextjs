@@ -8,6 +8,7 @@ import {
   ChannelsByType,
   CreateServerParams,
   DeleteServerParams,
+  FindGeneralChannelParams,
   FindServerChannelParams,
   GetServerDetailsParams,
   GetUserServerParams,
@@ -18,9 +19,11 @@ import {
   UpdateServerParams,
 } from './shared.types';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import prisma from '../prisma';
+import { profile } from 'console';
+import { channel } from 'diagnostics_channel';
 
 export async function getUserServers(params: GetUserServerParams) {
   try {
@@ -438,6 +441,43 @@ export async function deleteServer(params: DeleteServerParams) {
 
     console.log({ params });
     revalidatePath(route);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function findGeneralChannel(params: FindGeneralChannelParams) {
+  try {
+    const { serverId } = params;
+
+    if (!serverId) return redirect('/');
+
+    const profile = await currentProfle();
+
+    if (!profile) return redirect('/sign-in');
+
+    const server = await prisma.server.findUnique({
+      where: {
+        id: serverId,
+        members: {
+          some: {
+            profileId: profile.id,
+          },
+        },
+      },
+      include: {
+        channels: {
+          where: {
+            name: 'general',
+          },
+        },
+      },
+    });
+
+    return redirect(
+      server ? `/servers/${server.id}/channels/${server.channels[0].id}` : '/'
+    );
   } catch (error) {
     console.error(error);
     throw error;

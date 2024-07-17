@@ -24,7 +24,7 @@ const DeleteChannelModal = () => {
     try {
       await deleteChannel({
         serverId: data.server?.id,
-        route: pathName,
+        route: pathName!,
         channelId: data.channel?.id,
       });
       onClose();

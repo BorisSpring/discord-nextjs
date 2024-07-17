@@ -15,3 +15,11 @@ export const channelSchema = z.object({
     }),
   type: z.nativeEnum(ChannelType),
 });
+
+export const messageSchema = z.object({
+  content: z.string().min(1),
+});
+
+export const fileSchema = z.object({
+  fileUrl: z.string().url({ message: 'File is required!' }),
+});

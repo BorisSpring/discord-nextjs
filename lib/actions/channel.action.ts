@@ -5,6 +5,7 @@ import { currentProfle } from '../utils/current-profile';
 import {
   CreateChannelParams,
   DeleteChannelParams,
+  findChannelByServerIdAndChannelIdParams,
   UpdateChannelParams,
 } from './shared.types';
 import { revalidatePath } from 'next/cache';
@@ -150,6 +151,41 @@ export async function deleteChannel(params: DeleteChannelParams) {
     });
 
     revalidatePath(route);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function findChannelByServerIdAndChannelId(
+  params: findChannelByServerIdAndChannelIdParams
+) {
+  try {
+    const { serverId, channelId } = params;
+    if (!serverId || !channelId) return redirect('/');
+
+    const profile = await currentProfle();
+
+    if (!profile) return redirect('/sign-in');
+
+    const [channel, member] = await Promise.all([
+      prisma.channel.findUnique({
+        where: {
+          id: channelId,
+          serverId: serverId,
+        },
+      }),
+      prisma.member.findFirst({
+        where: {
+          profileId: profile.id,
+          serverId: serverId,
+        },
+      }),
+    ]);
+
+    if (!channel || !member) return redirect('/');
+
+    return { channel, member };
   } catch (error) {
     console.error(error);
     throw error;

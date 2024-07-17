@@ -16,9 +16,9 @@ const SingleServerLayout = async ({ children, params }: Props) => {
   if (!profile) return redirect('/sign-in');
   return (
     <div className='h-full'>
-      {/* <div className='hidden md:flex h-full w-60  fixed z-20 flex-col inset-y-0'> */}
-      <ServerSidebar serverId={params.serverId} />
-      {/* </div> */}
+      <div className='hidden md:flex h-full w-60  fixed z-20 flex-col inset-y-0'>
+        <ServerSidebar serverId={params.serverId} />
+      </div>
       <main className='h-full md:pl-60'>{children}</main>
     </div>
   );

@@ -1,7 +1,13 @@
-import React from 'react';
+import { findGeneralChannel } from '@/lib/actions/server.action';
 
-const SingleServerPage = () => {
-  return <div>SingleServerPage</div>;
+interface Props {
+  params: {
+    serverId: string;
+  };
+}
+
+const SingleServerPage = async ({ params }: Props) => {
+  return await findGeneralChannel({ serverId: params.serverId });
 };
 
 export default SingleServerPage;

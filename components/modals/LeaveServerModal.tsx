@@ -21,7 +21,7 @@ const LeaveServerModal = () => {
 
   const onHandleLeaveServer = async () => {
     try {
-      await leaveServer({ serverId: data.server?.id, route: pathName });
+      await leaveServer({ serverId: data.server?.id, route: pathName! });
       onClose();
       router.push('/');
     } catch (error) {

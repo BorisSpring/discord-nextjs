@@ -1,0 +1,4 @@
+ 
+
+ ### Get Messages
+GET http://localhost:3000/api/messages?channelId=abdac116-bb5f-4a0e-b5cb-6479ff3da758
