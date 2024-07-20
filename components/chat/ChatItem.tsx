@@ -107,7 +107,7 @@ const ChatItem = ({
   };
 
   return (
-    <div className='relative group flex items-center hover:bg-black/5 p-4 transition w-full'>
+    <div className='relative group flex items-center hover:bg-black/5 p-4 transition w-full overflow-hidden'>
       <div className='group flex gap-x-2 items-start w-full'>
         <button
           onClick={onMemberClick}
@@ -161,7 +161,7 @@ const ChatItem = ({
           {!fileUrl && !isEditing && (
             <p
               className={cn(
-                'text-sm text-zinc-600 dark:text-zinc-300',
+                'text-sm text-zinc-600 break-words w-[90%]  dark:text-zinc-300',
                 deleted &&
                   'italic text-zinc-500 dark:text-zinc-400 text-xs mt-1'
               )}
