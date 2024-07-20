@@ -19,11 +19,9 @@ import {
   UpdateServerParams,
 } from './shared.types';
 import { revalidatePath } from 'next/cache';
-import { notFound, redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import prisma from '../prisma';
-import { profile } from 'console';
-import { channel } from 'diagnostics_channel';
 
 export async function getUserServers(params: GetUserServerParams) {
   try {

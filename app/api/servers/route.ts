@@ -2,6 +2,7 @@ import { currentProfle } from '@/lib/utils/current-profile';
 import { v4 as uuidv4 } from 'uuid';
 import { NextResponse } from 'next/server';
 import { MemberRole } from '@prisma/client';
+import prisma from '../../../lib/prisma';
 
 export async function POST(req: Request) {
   try {
@@ -10,7 +11,7 @@ export async function POST(req: Request) {
 
     if (!profile) return new NextResponse('Unathorized', { status: 401 });
 
-    const server = await prisma?.server.create({
+    const server = await prisma.server.create({
       data: {
         profileId: profile.id,
         name,
