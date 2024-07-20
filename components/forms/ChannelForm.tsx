@@ -48,7 +48,11 @@ const ChannelForm = ({ server, channelType, channel }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof channelSchema>) => {
     try {
-      const methodObject = { ...values, serverId: server?.id, route: pathName };
+      const methodObject = {
+        ...values,
+        serverId: server?.id,
+        route: pathName!,
+      };
       await (channel?.id
         ? updateChannel({ ...methodObject, channelId: channel.id })
         : createChannel(methodObject));
