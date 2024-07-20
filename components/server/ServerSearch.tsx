@@ -50,7 +50,6 @@ const ServerSearch = ({ data }: Props) => {
     id: string;
     type: 'channel' | 'member';
   }) => {
-    console.log('on select');
     if (type === 'member') {
       return router.push(`/servers/${params?.serverId}/conversations/${id}`);
     } else {

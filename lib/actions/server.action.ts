@@ -439,7 +439,6 @@ export async function deleteServer(params: DeleteServerParams) {
       },
     });
 
-    console.log({ params });
     revalidatePath(route);
   } catch (error) {
     console.error(error);

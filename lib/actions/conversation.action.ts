@@ -87,7 +87,12 @@ export async function findOrCreateConversation(params: FindConversationParams) {
         ? conversation.memberTwo
         : conversation.memberOne;
 
-    return { conversation, otherMember };
+    const loggedMember =
+      conversation.memberOneId !== loggedUserMember.id
+        ? conversation.memberTwo
+        : conversation.memberOne;
+
+    return { conversation, otherMember, loggedMember };
   } catch (error) {
     console.error(error);
     throw error;

@@ -32,15 +32,12 @@ const ChatInput = ({ apiUrl, query, name, type }: Props) => {
   async function onSubmit(values: z.infer<typeof messageSchema>) {
     try {
       const url = qs.stringifyUrl({ url: apiUrl, query });
-      console.log({ url, values, query });
-      await axios.post(url, values);
       form.reset();
+      await axios.post(url, values);
     } catch (error: any) {
       console.error(error?.response?.data.message);
     }
   }
-
-  const isLoading = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
@@ -66,13 +63,11 @@ const ChatInput = ({ apiUrl, query, name, type }: Props) => {
                     }`}
                     value={field.value}
                     onChange={field.onChange}
-                    disabled={isLoading}
                     className='px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 no-focus'
                   />
                   <div className='absolute top-8 right-8'>
                     <EmojiPicker
                       onChange={(emoji: string) => {
-                        console.log('asasa');
                         field.onChange(`${field.value} ${emoji}`);
                       }}
                     />

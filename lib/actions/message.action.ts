@@ -67,7 +67,6 @@ export async function getMessages(params: GetMessagesParams) {
       nextCursor = messages[14].id;
     }
 
-    console.log({});
     return { items: messages, nextCursor };
   } catch (error) {
     console.error(error);

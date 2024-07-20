@@ -19,7 +19,7 @@ const EditServerSettingsModal = () => {
       <DialogContent className='bg-white text-black  overflow-hidden'>
         <DialogHeader>
           <DialogTitle className='text-center text-2xl font-bold'>
-            Create Your Server
+            Edit Your Server
           </DialogTitle>
           <DialogDescription className='text-center text-zinc-500'>
             Give your server a personality with a name and an image. You can

@@ -29,7 +29,6 @@ const DeleteMessageModal = () => {
         query,
       });
 
-      console.log({ url });
       await axios.delete(url);
       onClose();
     } catch (error) {
@@ -44,7 +43,7 @@ const DeleteMessageModal = () => {
       <DialogContent className='bg-white text-black rounded-md  overflow-hidden'>
         <DialogHeader>
           <DialogTitle className='text-center text-2xl font-bold'>
-            Delete Server
+            Delete Message
           </DialogTitle>
           <DialogDescription className='text-center text-base'>
             Are you sure you want to this? The message will be permanently

@@ -14,12 +14,12 @@ const authProfile = () => {
 export const ourFileRouter = {
   serverImage: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
     .middleware(async () => authProfile())
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ metadata }) => {
       return { uploadedBy: metadata.userId };
     }),
   messageFile: f(['pdf', 'image'])
     .middleware(async () => authProfile())
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ metadata }) => {
       return { uploadedBy: metadata.userId };
     }),
 } satisfies FileRouter;

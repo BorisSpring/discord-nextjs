@@ -7,7 +7,6 @@ import React from 'react';
 import ActionToolTip from '../ActionToolTip';
 import { ModalType, useModalStore } from '@/hooks/useModalStore';
 import { ServerWithMembersAndProfiles } from '@/lib/types';
-import { channel } from 'diagnostics_channel';
 
 interface Props {
   channel: Channel;

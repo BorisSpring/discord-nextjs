@@ -1,12 +1,14 @@
 'use client';
 import { Member } from '@prisma/client';
-import React, { Fragment } from 'react';
+import React, { ElementRef, Fragment, useRef } from 'react';
 import ChatWelcome from './ChatWelcome';
 import { Loader2, ServerCrash } from 'lucide-react';
 import { useChatQuery } from '../../hooks/useChatQuery';
 import { MessageWithMemberWithProfile } from '@/lib/types';
 import ChatItem from './ChatItem';
 import { formatDate } from 'date-fns';
+import { useChatSocket } from '@/hooks/useChatSocket';
+import { useChatScroll } from '@/hooks/useChatScroll';
 
 interface Props {
   name: string;
@@ -31,14 +33,30 @@ const ChatMessages = ({
   paramValue,
   type,
 }: Props) => {
-  const { data, fetchNextPage, isFetchingNextPage, status } = useChatQuery({
-    queryKey: `chat:${chatId}`,
-    apiUrl,
-    paramKey,
-    paramValue,
+  const chatRef = useRef<ElementRef<'div'>>(null);
+  const bottomRef = useRef<ElementRef<'div'>>(null);
+
+  const { data, fetchNextPage, isFetchingNextPage, status, hasNextPage } =
+    useChatQuery({
+      queryKey: `chat:${chatId}`,
+      apiUrl,
+      paramKey,
+      paramValue,
+    });
+
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    shoudLoadMore: !isFetchingNextPage && hasNextPage,
+    loadMore: fetchNextPage,
+    count: data?.pages?.[0]?.items?.length ?? 0,
   });
 
-  console.log({ data });
+  useChatSocket({
+    queryKey: `chat:${chatId}`,
+    updateKey: `chat:${chatId}:messages:update`,
+    addKey: `chat:${chatId}:messages`,
+  });
 
   if (status === 'pending') {
     return (
@@ -59,9 +77,32 @@ const ChatMessages = ({
   }
 
   return (
-    <div className='flex-1 flex flex-col py-4 overflow-y-auto'>
-      <div className='flex-1' />
-      <ChatWelcome type={type} name={name} />
+    <div
+      ref={chatRef}
+      className='flex-1 flex flex-col py-4 overflow-y-auto   scrollbar-thin dark:scrollbar-thumb-zinc-500  scrollbar-thumb-zinc-700'
+    >
+      {!hasNextPage ? (
+        <>
+          <div className='flex-1' />
+          <ChatWelcome type={type} name={name} />
+        </>
+      ) : (
+        <div className='flex justify-center'>
+          {isFetchingNextPage ? (
+            <Loader2 className='animate-spin size-6 text-zinc-500 my-4' />
+          ) : (
+            <button
+              className='text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400 text-xs my-4'
+              onClick={() =>
+                !isFetchingNextPage && hasNextPage && fetchNextPage()
+              }
+            >
+              Load previous messages
+            </button>
+          )}
+        </div>
+      )}
+
       <div className='flex flex-col-reverse mt-auto'>
         {data?.pages?.map((group, i) => (
           <Fragment key={i}>
@@ -83,6 +124,7 @@ const ChatMessages = ({
           </Fragment>
         ))}
       </div>
+      <div ref={bottomRef} />
     </div>
   );
 };

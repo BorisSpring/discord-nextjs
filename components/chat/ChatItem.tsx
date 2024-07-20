@@ -63,7 +63,7 @@ const ChatItem = ({
 
   const fileType = fileUrl?.split('.').pop();
   const isAdmin = currentMember.role === MemberRole.ADMIN;
-  const isOwner = currentMember.id === member.id;
+  const isOwner = currentMember?.id === member?.id;
   const isModerator = currentMember.role === MemberRole.MODERATOR;
   const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
   const canEditMessage = !deleted && isOwner && !fileUrl;
@@ -101,9 +101,9 @@ const ChatItem = ({
   }
 
   const onMemberClick = () => {
-    if (member.id === currentMember.id) return;
+    if (member?.id === currentMember?.id) return;
 
-    router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
+    router.push(`/servers/${params?.serverId}/conversations/${member?.id}`);
   };
 
   return (
@@ -113,16 +113,16 @@ const ChatItem = ({
           onClick={onMemberClick}
           className='cursor-pointer hover:drop-shadow-md transition'
         >
-          <UserAvatar src={member.profile.imageUrl} />
+          <UserAvatar src={member?.profile?.imageUrl} />
         </button>
         <div className='flex flex-col w-full'>
           <div onClick={onMemberClick} className='flex items-center space-x-2'>
             <div className='flex items-center'>
               <p className='font-semibold text-sm hover:underline cursor-pointer'>
-                {member.profile.name}
+                {member?.profile?.name}
               </p>
-              <ActionToolTip label={member.role} align='center'>
-                {roleIconMap[member.role]}
+              <ActionToolTip label={member?.role} align='center'>
+                {roleIconMap[member?.role]}
               </ActionToolTip>
             </div>
             <span className='text-xs text-zinc-500 dark:text-zinc-400'>
